@@ -6,7 +6,7 @@ var Stack = function() {
   _.extend(instance, stackMethods);
 
   return instance;
-  // Hey! Rewrite in the new style. Your code will wind up looking very similar,
+  // Hey! Rewrite in the new style.subl Your code will wind up looking very similar,
   // but try not not reference your old code in writing the new style.
 };
 
@@ -20,7 +20,7 @@ var stackMethods = {
   pop: function() {
     var result = this.storage[this.size() - 1];
     delete this.storage[this.size() - 1];
-    
+
     return result;
   }
 };
