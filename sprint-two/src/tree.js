@@ -27,14 +27,19 @@ treeMethods.contains = function(target) {
     return true;
   }
 
-  _.each(this.children, function(child) {
-
-    if (child.contains(target)) {
-      bool = true;
+  for (var i = 0; i < this.children.length; i++) {
+    if (this.children[i].contains(target)) {
+      return true;
     }
-  });
+  }
+  // _.each(this.children, function(child) {
 
-  return bool;
+  //   if (child.contains(target)) {
+  //     bool = true;
+  //   }
+  // });
+  return false;
+  //return bool;
 };
 
 
