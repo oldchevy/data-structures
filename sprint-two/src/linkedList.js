@@ -24,21 +24,17 @@ var LinkedList = function() {
   list.contains = function(target) {
     
     var workingNode = list.head;
-
     while (workingNode !== null) {
 
       if ( workingNode.value === target) {
         return true;
       }
-
       workingNode = workingNode.next;
 
     }
-
     return false;
     
   };
-
   return list;
 };
 
