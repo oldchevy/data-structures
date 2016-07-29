@@ -31,9 +31,34 @@ describe('binarySearchTree', function() {
   it('should execute a callback on every value in a tree using "depthFirstLog"', function() {
     var array = [];
     var func = function(value) { array.push(value); };
+    binarySearchTree.insert(9);
     binarySearchTree.insert(2);
     binarySearchTree.insert(3);
+    binarySearchTree.insert(7);
     binarySearchTree.depthFirstLog(func);
-    expect(array).to.eql([5, 2, 3]);
+    expect(array).to.eql([5, 2, 3, 9, 7]);
   });
+    
+  it('should have a parent property pointing to parent or null', function() {
+    binarySearchTree.insert(2);
+    binarySearchTree.insert(3);
+    binarySearchTree.insert(7);
+    expect(binarySearchTree.left.right.parent.value).to.equal(2);
+    expect(binarySearchTree.parent).to.equal(null);
+  });
+
+  it('should execute a callback on every value in a breadth first manner', function() {
+    
+    var array = [];
+    var func = function(value) { array.push(value); };
+
+    binarySearchTree.insert(9);
+    binarySearchTree.insert(2);
+    binarySearchTree.insert(3);
+    binarySearchTree.insert(7);
+    binarySearchTree.breadthFirstLog(func);
+    expect(array).to.eql([5, 2, 9, 3, 7]);
+  });
+
+
 });

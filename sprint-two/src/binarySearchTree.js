@@ -1,8 +1,9 @@
-var BinarySearchTree = function(value) {
+var BinarySearchTree = function(value, parent) {
   var instance = {};
   instance.value = value;
   instance.left = null;
   instance.right = null;
+  instance.parent = parent || null;
   _.extend(instance, BSTmethods);
   return instance;
 };
@@ -11,9 +12,9 @@ var BSTmethods = {
   insert: function(value) {
 
     if (this.value > value) {
-      this.left ? this.left.insert(value) : this.left = BinarySearchTree(value);
+      this.left ? this.left.insert(value) : this.left = BinarySearchTree(value, this);
     } else {
-      this.right ? this.right.insert(value) : this.right = BinarySearchTree(value);
+      this.right ? this.right.insert(value) : this.right = BinarySearchTree(value, this);
     }
 
   },
@@ -41,8 +42,31 @@ var BSTmethods = {
     if (this.right) {
       this.right.depthFirstLog(cb);
     }
+  },
+  breadthFirstLog: function(cb) {
+    
+    var q = new Queue();
+    var current;
+
+    q.enqueue(this);
+
+    while (q.size() > 0) {
+
+      current = q.dequeue();
+      cb(current.value);
+
+      if (current.left) {
+        q.enqueue(current.left);
+      }
+
+      if (current.right) {
+        q.enqueue(current.right);
+      }
+    }
   }
+
 };
+
 
 
 /*
