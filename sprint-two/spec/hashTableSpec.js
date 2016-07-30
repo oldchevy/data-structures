@@ -6,7 +6,37 @@ describe('hashTable', function() {
   beforeEach(function() {
     hashTable = new HashTable();
   });
+  
+  describe('Specs for advanced content', function() {
 
+    it ('should double in size when needed', function() {
+      _.each(people, function(person) {
+        var firstName = person[0];
+        var lastName = person[1];
+        hashTable.insert(firstName, lastName);
+        expect(hashTable.retrieve(firstName)).to.equal(lastName);
+      });
+      expect(hashTable._limit).to.equal(16);
+    });
+
+    it ('should halve in size when needed', function() {
+      _.each(people, function(person) {
+        var firstName = person[0];
+        var lastName = person[1];
+        hashTable.insert(firstName, lastName);
+        expect(hashTable.retrieve(firstName)).to.equal(lastName);
+      });
+      expect(hashTable._limit).to.equal(16);
+      hashTable.remove('George');
+      hashTable.remove('Dr.');
+      hashTable.remove('Steven');
+      hashTable.remove('John');
+      hashTable.remove('Mr.');
+      expect(hashTable._limit).to.equal(8);
+    });
+
+
+  });
   it('should have methods named "insert", "remove", and "retrieve', function() {
     expect(hashTable.insert).to.be.a('function');
     expect(hashTable.remove).to.be.a('function');
@@ -48,29 +78,5 @@ describe('hashTable', function() {
   });
 
   // (Advanced! Remove the extra "x" when you want the following tests to run)
-  it ('should double in size when needed', function() {
-    _.each(people, function(person) {
-      var firstName = person[0];
-      var lastName = person[1];
-      hashTable.insert(firstName, lastName);
-      expect(hashTable.retrieve(firstName)).to.equal(lastName);
-    });
-    expect(hashTable._limit).to.equal(16);
-  });
-
-  it ('should halve in size when needed', function() {
-    _.each(people, function(person) {
-      var firstName = person[0];
-      var lastName = person[1];
-      hashTable.insert(firstName, lastName);
-      expect(hashTable.retrieve(firstName)).to.equal(lastName);
-    });
-    expect(hashTable._limit).to.equal(16);
-    hashTable.remove('George');
-    hashTable.remove('Dr.');
-    hashTable.remove('Steven');
-    hashTable.remove('John');
-    hashTable.remove('Mr.');
-    expect(hashTable._limit).to.equal(8);
-  });
+  
 });

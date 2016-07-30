@@ -10,82 +10,45 @@ var BinarySearchTree = function(value, parent) {
 };
 
 var BSTmethods = {
+
   insert: function(value) {
 
-    // var temp = this;
-    // while (temp.parent) {
-    //   temp = this.parent;
-    // }
-
+    //This call is linear. Is there any way we can break the operation when it finds the first min?
     var min = [];
     this.breadthFirstLog(function(node) {
       if (!node.left && !node.right) {
         min.push(node.level);
       }
     });
-
-    //min = min.length > 0 ? min : [1];
-
-    // var max = 0;
-    var top = this;
-
-    // this.depthFirstLog(function(node) {
-    //   max = Math.max(max, this.level);
-    // });
-
   
-
-    var recurse = function(node) {
-      if (node.value > value) {
-        if (node.left) {
-          recurse(node.left);
+    //Binding 'this' value to top level works in recursion. That makes sense and is cool!
+    var recurse = (function(node) {
+      
+      //Again passing along 'this' through binding for the logic function
+      var logic = (function(LorR) {
+        if (node[LorR]) {
+          recurse(node[LorR]);
         } else {
           var result = BinarySearchTree(value, node);
           result.level = node.level + 1;
-          node.left = result;
+          node[LorR] = result;
      
           if (min[0] && result.level / min[0] > 2) {
-            top.rebalance();
+            this.rebalance();
           }
         }
+      }).bind(this);
+
+
+      if (node.value > value) {
+        logic('left');
       } else {
-        if (node.right) {
-          recurse(node.right);
-        } else {
-          var result = BinarySearchTree(value, node);
-          result.level = node.level + 1;
-          node.right = result;
-        
-          if (min[0] && result.level / min[0] > 2) {
-            console.log('rebalancing');
-            top.rebalance();
-          }
-        }
+        logic('right');
       }
-    };
+    }).bind(this);
 
+    //Begin recursion
     recurse(this);
-
-
-    // if (this.value > value) {
-    //   if (this.left) {
-    //     this.left.insert(value);
-    //   } else {
-    //     this.levels.push(this.levels + 1);
-    //     var result = BinarySearchTree(value, this, this.levels);
-    //     result.level = this.level + 1;
-    //     this.left = result;
-    //   }
-    // //   this.left ? this.left.insert(value) : this.left = BinarySearchTree(value, this);
-    // } else {
-    //   if (this.right) {
-    //     this.right.insert(value);
-    //   } else {
-    //     var result = BinarySearchTree(value, this, this.levels);
-    //     result.level = this.level + 1;
-    //     this.right = result;
-    //   }
-    // }
     
   },
   contains: function(value) {
@@ -95,6 +58,7 @@ var BSTmethods = {
       return true;
     } else {
       if (this.value > value) {
+        //First part makes sure node exists, then casts it as a boolean for proper return
         return !!this.left && this.left.contains(value);
       } else {
         return !!this.right && this.right.contains(value);
@@ -104,18 +68,18 @@ var BSTmethods = {
   },
   depthFirstLog: function(cb) {
 
-    
-
+    //This order guarantees nodes will be visited in sorted order
     if (this.left) {
       this.left.depthFirstLog(cb);
     }
 
-    cb(this.value);
+    cb(this);
 
     if (this.right) {
       this.right.depthFirstLog(cb);
     }
   },
+
   breadthFirstLog: function(cb) {
     
     var q = new Queue();
@@ -123,6 +87,7 @@ var BSTmethods = {
 
     q.enqueue(this);
 
+    //Visit each node in the queue, and add each of it's children to the queue
     while (q.size() > 0) {
 
       current = q.dequeue();
@@ -138,29 +103,23 @@ var BSTmethods = {
     }
   },
 
-  // findTop: function() {
-  //   var lvlCount = 0;
-  //   var node = this;
-  //   while (node.parent) {
-  //     count++;
-  //     node = node.parent;
-  //   }
-  //   return lvlCount;
-  // }
-
   rebalance: function() {
+
     var list = [];
 
+    //Returns all values in sorted order
     this.depthFirstLog(function(node) {
-      list.push(node);
+      list.push(node.value);
     });
 
     var start = Math.floor(list.length / 2);
 
+    //Detaching head of tree and reassigning it's value
     this.value = list[start];
     this.left = null;
     this.right = null;
 
+    //Resorting
     for (var i = 1; i < start; i++) {
       this.insert(list[start + i]);
       this.insert(list[start - i]);

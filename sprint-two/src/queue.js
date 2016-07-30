@@ -22,4 +22,13 @@ Queue.prototype.dequeue = function() {
   return result;
 };
 
+var makeQueues = function(n) {
+  var hello = [];
+    for (var i = 0; i < n; i++) {
+      var queue = new Queue();
+      hello.push(queue);
+    }
+};
+      
+makeQueues(10000000);
 
