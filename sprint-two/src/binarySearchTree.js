@@ -4,7 +4,7 @@ var BinarySearchTree = function(value, parent) {
   instance.left = null;
   instance.right = null;
   instance.parent = parent || null;
-  instance.level = 0;
+  instance.level = 1;
   _.extend(instance, BSTmethods);
   return instance;
 };
@@ -12,12 +12,19 @@ var BinarySearchTree = function(value, parent) {
 var BSTmethods = {
   insert: function(value) {
 
+    // var temp = this;
+    // while (temp.parent) {
+    //   temp = this.parent;
+    // }
+
     var min = [];
     this.breadthFirstLog(function(node) {
       if (!node.left && !node.right) {
         min.push(node.level);
       }
     });
+
+    //min = min.length > 0 ? min : [1];
 
     // var max = 0;
     var top = this;
@@ -50,6 +57,7 @@ var BSTmethods = {
           node.right = result;
         
           if (min[0] && result.level / min[0] > 2) {
+            console.log('rebalancing');
             top.rebalance();
           }
         }
@@ -96,11 +104,14 @@ var BSTmethods = {
   },
   depthFirstLog: function(cb) {
 
-    cb(this.value);
+    
 
     if (this.left) {
       this.left.depthFirstLog(cb);
     }
+
+    cb(this.value);
+
     if (this.right) {
       this.right.depthFirstLog(cb);
     }
@@ -138,7 +149,26 @@ var BSTmethods = {
   // }
 
   rebalance: function() {
-    console.log(this);
+    var list = [];
+
+    this.depthFirstLog(function(node) {
+      list.push(node);
+    });
+
+    var start = Math.floor(list.length / 2);
+
+    this.value = list[start];
+    this.left = null;
+    this.right = null;
+
+    for (var i = 1; i < start; i++) {
+      this.insert(list[start + i]);
+      this.insert(list[start - i]);
+    }
+
+    this.insert(list[0]);
+    
+
   }
 };
 

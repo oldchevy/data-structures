@@ -28,7 +28,7 @@ describe('binarySearchTree', function() {
     expect(binarySearchTree.contains(8)).to.equal(false);
   });
 
-  it('should execute a callback on every value in a tree using "depthFirstLog"', function() {
+  it('should execute a callback on every value in a tree using "depthFirstLog" in sorted order', function() {
     var array = [];
     var func = function(value) { array.push(value); };
     binarySearchTree.insert(9);
@@ -36,7 +36,7 @@ describe('binarySearchTree', function() {
     binarySearchTree.insert(3);
     binarySearchTree.insert(7);
     binarySearchTree.depthFirstLog(func);
-    expect(array).to.eql([5, 2, 3, 9, 7]);
+    expect(array).to.eql([2, 3, 5, 7, 9]);
   });
     
   it('should have a parent property pointing to parent or null', function() {
@@ -58,6 +58,25 @@ describe('binarySearchTree', function() {
     binarySearchTree.insert(7);
     binarySearchTree.breadthFirstLog(func);
     expect(array).to.eql([5, 2, 9, 3, 7]);
+  });
+
+  it('should rebalance the tree if tree max height / min height > 2', function() {
+    
+    var array = [];
+    var func = function(value) { array.push(value.value); };
+
+    binarySearchTree.insert(7);
+    binarySearchTree.insert(4);
+    binarySearchTree.insert(3);
+    binarySearchTree.insert(2);
+    binarySearchTree.breadthFirstLog(func);
+    expect(array).to.eql([5, 4, 7, 3, 2]);
+
+    array = [];
+    //Rebalance Triggered Here
+    binarySearchTree.insert(1);
+    binarySearchTree.breadthFirstLog(func);
+    expect(array).to.eql([4, 3, 5, 2, 7, 1]);
   });
 
 
